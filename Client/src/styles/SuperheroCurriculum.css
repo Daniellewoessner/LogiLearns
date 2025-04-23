@@ -1,0 +1,350 @@
+/* SuperheroCurriculum.module.css */
+/* Dyslexia-friendly base styles */
+.curriculumContainer {
+    font-family: 'Comic Sans MS', 'OpenDyslexic', Arial, sans-serif;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* High contrast mode */
+  .highContrast {
+    background-color: #f7f3e9;
+    color: #000000;
+  }
+  
+  .standardContrast {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  /* Header styles */
+  .curriculumHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #3d7c98;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 30px;
+  }
+  
+  .logoContainer h1 {
+    font-size: 2.5rem;
+    margin: 0;
+  }
+  
+  .logoContainer h2 {
+    font-size: 1.5rem;
+    margin: 5px 0 0 0;
+  }
+  
+  /* Accessibility controls */
+  .accessibilityControls {
+    display: flex;
+    gap: 15px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .textControls, .spacingControls, .contrastControl, .audioControl {
+    display: flex;
+    align-items: center;
+  }
+  
+  .textControlButton, .spacingControlButton, .contrastButton, .audioButton {
+    background-color: #ffffff;
+    border: 2px solid #3d7c98;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+  }
+  
+  .textControlButton:hover, .spacingControlButton:hover, 
+  .contrastButton:hover, .audioButton:hover {
+    background-color: #3d7c98;
+    color: white;
+  }
+  
+  /* Week navigation */
+  .weekNavigation {
+    margin-bottom: 30px;
+  }
+  
+  .weekNavigation h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  
+  .weekButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .weekButton {
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .weekButton:hover {
+    background-color: #d0d0d0;
+  }
+  
+  .weekButton.active {
+    background-color: #ffd166;
+    font-weight: bold;
+  }
+  
+  /* Week content */
+  .weekContent {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .weekHeader {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .weekHeader h2 {
+    font-size: 2rem;
+    margin: 0 0 10px 0;
+    color: #3d7c98;
+  }
+  
+  .weekHeader h3 {
+    font-size: 1.3rem;
+    margin: 0 0 15px 0;
+    color: #555;
+  }
+  
+  .playDescription {
+    align-self: flex-start;
+    background-color: #3d7c98;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .weekDescription {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+  }
+  
+  .weekImage {
+    width: 100%;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  /* Activities section */
+  .activitiesSection {
+    margin-bottom: 40px;
+  }
+  
+  .activitiesSection h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #ffd166;
+    padding-bottom: 8px;
+  }
+  
+  .activitiesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+  }
+  
+  .activityCard {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+    position: relative;
+    border-top: 8px solid #ccc;
+    transition: transform 0.2s ease;
+  }
+  
+  .activityCard:hover {
+    transform: translateY(-5px);
+  }
+  
+  .activityVisual { border-top-color: #4cc9f0; }
+  .activityAuditory { border-top-color: #f72585; }
+  .activityTactile { border-top-color: #7209b7; }
+  .activityKinesthetic { border-top-color: #4361ee; }
+  .activityDiscussion { border-top-color: #3a0ca3; }
+  
+  .activityTypeIcon {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.8rem;
+  }
+  
+  .activityCard h4 {
+    font-size: 1.4rem;
+    margin: 0 0 15px 0;
+    padding-right: 40px; /* Make room for icon */
+  }
+  
+  .activityCard > p {
+    margin-bottom: 20px;
+  }
+  
+  .activityDetails {
+    margin-bottom: 20px;
+  }
+  
+  .materials, .instructions, .adaptations {
+    margin-bottom: 15px;
+  }
+  
+  .activityDetails h5 {
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+    color: #555;
+  }
+  
+  .activityDetails ul {
+    margin: 0;
+    padding-left: 25px;
+  }
+  
+  .activityDetails li {
+    margin-bottom: 4px;
+  }
+  
+  .playInstructions {
+    background-color: transparent;
+    color: #3d7c98;
+    border: 1px solid #3d7c98;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin-top: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .viewActivityButton {
+    display: block;
+    background-color: #ffd166;
+    color: #333;
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  
+  .viewActivityButton:hover {
+    background-color: #ffbd33;
+  }
+  
+  /* Take home project */
+  .takeHomeProject {
+    margin-bottom: 40px;
+  }
+  
+  .takeHomeProject h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #ffd166;
+    padding-bottom: 8px;
+  }
+  
+  .projectCard {
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    padding: 25px;
+    border-left: 8px solid #3d7c98;
+  }
+  
+  .projectCard p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+  
+  .viewProjectButton {
+    display: inline-block;
+    background-color: #3d7c98;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  
+  .viewProjectButton:hover {
+    background-color: #2c5a70;
+  }
+  
+  /* Navigation buttons */
+  .navigationButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+  
+  .prevWeekButton, .nextWeekButton {
+    background-color: #3d7c98;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .prevWeekButton:hover, .nextWeekButton:hover {
+    background-color: #2c5a70;
+  }
+  
+  .prevWeekButton:disabled, .nextWeekButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive adaptations */
+  @media (max-width: 768px) {
+    .curriculumHeader {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+  
+    .accessibilityControls {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+  
+    .activitiesGrid {
+      grid-template-columns: 1fr;
+    }
+  }
