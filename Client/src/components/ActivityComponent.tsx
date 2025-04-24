@@ -1,456 +1,289 @@
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import Link from 'next/link'; // Next.js Link component for navigation
-import styles from '../styles/ActivityComponent.module.css'; // Fixed path
+import { useParams, Link } from 'react-router-dom';
+import StoryPlayer from '../components/StoryPlayer';
+import "../styles/SuperheroCurriculum.css";
 
-interface ActivityProps {
-  id: number;
-  title: string;
-  type: 'visual' | 'auditory' | 'tactile' | 'kinesthetic' | 'discussion';
-  weekId: number;
-  weekTitle: string;
-  description: string;
-  learningGoals: string[];
-  materials: string[];
-  instructions: string[];
-  adaptations: string[];
-  visualSupports: string[];
-  completionSteps: string[];
+interface ActivityParams {
+  id: string;
 }
 
-// Sample data (your existing activityData)
-const activityData: ActivityProps = {
-  id: 101,
-  title: "Hero Stories",
-  type: "visual",
-  weekId: 1,
-  weekTitle: "Introduction to Heroes",
-  description: "Listen to short, illustrated superhero stories with synchronized highlighting of text",
-  learningGoals: [
-    "Improve reading comprehension",
-    "Build vocabulary related to hero qualities",
-    "Practice active listening skills"
-  ],
-  materials: [
-    "Story cards with dyslexia-friendly text",
-    "Audio recordings of stories",
-    "Visual vocabulary cards",
-    "Character trait icons"
-  ],
-  instructions: [
-    "Find a comfortable spot where you can see the screen clearly",
-    "Click the 'Start Story' button to begin",
-    "Follow along with the highlighted text as the story plays",
-    "Use the pause button if you need more time",
-    "After each story, click on the hero qualities shown in the story",
-    "Complete the reflection activity"
-  ],
-  adaptations: [
-    "Text highlighting follows audio narration",
-    "Pause and replay buttons for each segment",
-    "Visual vocabulary support with images",
-    "Option to adjust reading speed",
-    "Alternative keyboard navigation"
-  ],
-  visualSupports: [
-    "/images/activities/story-card-example.png",
-    "/images/activities/hero-traits-visual.png"
-  ],
-  completionSteps: [
-    "Listen to at least one story",
-    "Identify 3 hero qualities from the story",
-    "Complete the matching activity",
-    "Record your favorite part (draw, write, or record)"
-  ]
-};
-
-// Define related activities for navigation
-const relatedActivities = [
-  { id: 102, title: "Hero Sculpting", type: "tactile" },
-  { id: 103, title: "Real Heroes Circle", type: "discussion" }
-];
-
-const ActivityComponent: React.FC = () => {
-  const router = useRouter();
-  const { id } = router.query;
-  const [activity, setActivity] = useState<ActivityProps | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [audioEnabled, setAudioEnabled] = useState(true);
-  const [fontSize, setFontSize] = useState(18);
-  const [isStoryPlaying, setIsStoryPlaying] = useState(false);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-
-  // Simulate fetching activity data
-  useEffect(() => {
-    // In a real application, you would fetch the activity based on the ID
-    // For now, we'll just use our sample data
-    setTimeout(() => {
-      setActivity(activityData);
-      setLoading(false);
-    }, 500);
-  }, [id]);
-
-  const handleStepComplete = (stepIndex: number) => {
-    if (!completedSteps.includes(stepIndex)) {
-      setCompletedSteps([...completedSteps, stepIndex]);
+const ActivityPage: React.FC = () => {
+  const { id } = useParams() as unknown as ActivityParams;
+  const activityId = parseInt(id || "0");
+  
+  // State for accessibility settings (would be managed globally in a real app)
+  const [fontSize, setFontSize] = useState<number>(18);
+  const [lineSpacing, setLineSpacing] = useState<number>(1.6);
+  const [letterSpacing, setLetterSpacing] = useState<number>(0.12);
+  const [highContrast, setHighContrast] = useState<boolean>(false);
+  const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
+  
+  // Sample stories data - in a real app, this data would come from your API or data store
+  const stories = [
+    {
+      id: 101, // This matches the activityId from the curriculum
+      title: "Professor Pancake Saves the Day",
+      audioUrl: "/stories/professor-pancake.mp3",
+      characterIcon: "🥞",
+      text: [
+        "Once upon a time, there was a professor who loved pancakes more than anything.",
+        "Every morning, he would flip pancakes for his students before class.",
+        "They called him Professor Pancake!",
+        "One day, the school's electricity went out right before a big presentation.",
+        "Professor Pancake knew just what to do.",
+        "He used his special solar-powered pancake griddle to power up the computers!",
+        "Everyone cheered for Professor Pancake - a true hero with a delicious superpower!"
+      ],
+      comprehensionQuestions: [
+        {
+          question: "What did Professor Pancake love more than anything?",
+          options: ["Waffles", "Pancakes", "Teaching", "Computers"],
+          correctAnswer: 1
+        },
+        {
+          question: "How did Professor Pancake help during the power outage?",
+          options: [
+            "He called an electrician", 
+            "He used his solar-powered griddle", 
+            "He canceled the presentation", 
+            "He made pancakes for everyone"
+          ],
+          correctAnswer: 1
+        }
+      ]
+    },
+    {
+      id: 102,
+      title: "Clay the Brave",
+      audioUrl: "/stories/clay-brave.mp3",
+      characterIcon: "🧩",
+      text: [
+        "Clay was a small lump of modeling clay who lived in a classroom.",
+        "The children would mold Clay into different shapes every day.",
+        "Sometimes Clay was a dinosaur, sometimes a rocket ship!",
+        "Clay was brave and never afraid to change shape.",
+        "One day, a new student came to class. He was very shy.",
+        "Clay helped the boy create a superhero figure.",
+        "As the boy shaped Clay, he began to smile and talk to the other kids.",
+        "Clay was a hero because he helped the boy find courage to be himself!"
+      ],
+      comprehensionQuestions: [
+        {
+          question: "Where did Clay live?",
+          options: ["In a toy store", "In a classroom", "In a garden", "In a museum"],
+          correctAnswer: 1
+        },
+        {
+          question: "How did Clay help the new student?",
+          options: [
+            "He taught him how to read", 
+            "He introduced him to the teacher", 
+            "He helped him make a superhero", 
+            "He showed him around the school"
+          ],
+          correctAnswer: 2
+        }
+      ]
+    }
+  ];
+  
+  const selectedStory = stories.find(story => story.id === activityId) || stories[0];
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [showFeedback, setShowFeedback] = useState<boolean>(false);
+  const [completed, setCompleted] = useState<boolean>(false);
+  
+  const handleAnswer = (optionIndex: number) => {
+    setSelectedAnswer(optionIndex);
+    setShowFeedback(true);
+  };
+  
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < selectedStory.comprehensionQuestions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setSelectedAnswer(null);
+      setShowFeedback(false);
+    } else {
+      setCompleted(true);
     }
   };
-
-  const handleNextStep = () => {
-    if (activity && currentStep < activity.instructions.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const handlePrevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const toggleAudio = () => {
-    setAudioEnabled(!audioEnabled);
-  };
-
-  const handleFontSizeChange = (size: number) => {
-    setFontSize(size);
-  };
-
-  const handlePlayStory = () => {
-    setIsStoryPlaying(true);
-    // In a real app, this would trigger your audio/visual story player
-  };
-
-  const handlePauseStory = () => {
-    setIsStoryPlaying(false);
-  };
-
-  // Get activity type icon
-  const getActivityTypeIcon = (type: string) => {
-    switch (type) {
-      case 'visual': return '👁️';
-      case 'auditory': return '👂';
-      case 'tactile': return '✋';
-      case 'kinesthetic': return '🏃';
-      case 'discussion': return '💬';
-      default: return '📝';
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner}></div>
-        <p>Loading activity...</p>
-      </div>
-    );
-  }
-
-  if (!activity) {
-    return (
-      <div className={styles.errorContainer}>
-        <h2>Activity Not Found</h2>
-        <p>Sorry, we couldn't find the activity you're looking for.</p>
-        <button onClick={() => router.push('/curriculum')} className={styles.backButton}>
-          Back to Curriculum
-        </button>
-      </div>
-    );
-  }
-
+  
   return (
     <div 
-      className={styles.activityContainer}
-      style={{ fontSize: `${fontSize}px` }}
+      className={`activity-page ${highContrast ? 'high-contrast' : ''}`}
+      style={{
+        fontFamily: "'Comic Sans MS', 'OpenDyslexic', Arial, sans-serif",
+        fontSize: `${fontSize}px`,
+        lineHeight: lineSpacing,
+        letterSpacing: `${letterSpacing}em`,
+        backgroundColor: highContrast ? '#f7f3e9' : '#ffffff',
+        color: highContrast ? '#000000' : '#333333',
+        padding: '20px',
+        maxWidth: '1000px',
+        margin: '0 auto'
+      }}
     >
-      <div className={styles.activityHeader}>
-        <button onClick={() => router.back()} className={styles.backButton}>
-          ← Back
-        </button>
-        
-        <div className={styles.activityTitleSection}>
-          <div className={styles.breadcrumbs}>
-            Week {activity.weekId}: {activity.weekTitle} / Activity
-          </div>
-          <h1>
-            <span className={styles.activityTypeIcon}>
-              {getActivityTypeIcon(activity.type)}
-            </span>
-            {activity.title}
-          </h1>
-          <div className={styles.activityType}>
-            {activity.type.charAt(0).toUpperCase() + activity.type.slice(1)} Activity
+      {/* Navigation Breadcrumbs */}
+      <div className="breadcrumbs mb-4">
+        <Link to="/">Home</Link> &gt; 
+        <Link to="/curriculum">Superhero Curriculum</Link> &gt;
+        <span>{selectedStory.title}</span>
+      </div>
+      
+      <header className="text-center mb-8">
+        <h1 className="text-3xl font-bold">{selectedStory.title}</h1>
+        <p className="text-lg">Listen to the story and follow along with the text</p>
+      </header>
+      
+      {/* Story Player Component */}
+      <StoryPlayer
+        storyTitle={selectedStory.title}
+        storyAudioUrl={selectedStory.audioUrl}
+        storyText={selectedStory.text}
+        characterIcon={selectedStory.characterIcon}
+        highContrast={highContrast}
+        fontSize={fontSize}
+        lineSpacing={lineSpacing}
+        letterSpacing={letterSpacing}
+      />
+      
+      {/* Comprehension Questions */}
+      {!completed ? (
+        <div className="comprehension-section mt-8 p-6 rounded-xl bg-blue-50 shadow-md">
+          <h2 className="text-xl font-bold mb-4">Check Your Understanding</h2>
+          
+          <div className="question-card">
+            <h3 className="text-lg font-semibold mb-3">
+              Question {currentQuestionIndex + 1} of {selectedStory.comprehensionQuestions.length}:
+            </h3>
+            <p className="mb-4">{selectedStory.comprehensionQuestions[currentQuestionIndex].question}</p>
+            
+            <div className="answer-options flex flex-col gap-2">
+              {selectedStory.comprehensionQuestions[currentQuestionIndex].options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleAnswer(index)}
+                  className={`p-3 rounded-lg text-left transition-all ${
+                    selectedAnswer === index 
+                      ? showFeedback
+                        ? index === selectedStory.comprehensionQuestions[currentQuestionIndex].correctAnswer
+                          ? 'bg-green-200 border-2 border-green-500'
+                          : 'bg-red-200 border-2 border-red-500'
+                        : 'bg-blue-200 border-2 border-blue-500'
+                      : 'bg-white hover:bg-blue-100 border-2 border-gray-200'
+                  }`}
+                  disabled={showFeedback}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+            
+            {showFeedback && (
+              <div className={`feedback mt-4 p-3 rounded-lg ${
+                selectedAnswer === selectedStory.comprehensionQuestions[currentQuestionIndex].correctAnswer
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-red-100 text-red-800'
+              }`}>
+                <p>
+                  {selectedAnswer === selectedStory.comprehensionQuestions[currentQuestionIndex].correctAnswer
+                    ? '✅ Correct! Great job!'
+                    : `❌ Not quite. The correct answer is: ${
+                        selectedStory.comprehensionQuestions[currentQuestionIndex].options[
+                          selectedStory.comprehensionQuestions[currentQuestionIndex].correctAnswer
+                        ]
+                      }`
+                  }
+                </p>
+                <button
+                  onClick={handleNextQuestion}
+                  className="mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600"
+                >
+                  {currentQuestionIndex < selectedStory.comprehensionQuestions.length - 1
+                    ? 'Next Question'
+                    : 'Complete Activity'
+                  }
+                </button>
+              </div>
+            )}
           </div>
         </div>
-        
-        <div className={styles.accessibilityControls}>
+      ) : (
+        <div className="completion-section mt-8 p-6 rounded-xl bg-green-50 text-center">
+          <h2 className="text-2xl font-bold mb-2">✨ Activity Completed! ✨</h2>
+          <p className="mb-4">Great job understanding the story!</p>
+          
+          <div className="flex justify-center gap-4">
+            <Link to="/curriculum" className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600">
+              Back to Curriculum
+            </Link>
+            <button 
+              onClick={() => {
+                setCurrentQuestionIndex(0);
+                setSelectedAnswer(null);
+                setShowFeedback(false);
+                setCompleted(false);
+              }}
+              className="px-4 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      )}
+      
+      {/* Accessibility Controls */}
+      <div className="accessibility-controls mt-8 p-4 bg-gray-100 rounded-lg">
+        <h3 className="font-semibold mb-2">Reading Settings</h3>
+        <div className="flex flex-wrap gap-2">
           <button 
-            onClick={() => handleFontSizeChange(fontSize - 2)}
+            onClick={() => setFontSize(Math.max(14, fontSize - 2))}
             aria-label="Decrease font size"
             disabled={fontSize <= 14}
-            className={styles.textControlButton}
+            className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50"
           >
             A-
           </button>
           <button 
-            onClick={() => handleFontSizeChange(fontSize + 2)}
+            onClick={() => setFontSize(fontSize + 2)}
             aria-label="Increase font size"
-            className={styles.textControlButton}
+            className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200"
           >
             A+
           </button>
           <button 
-            onClick={toggleAudio}
+            onClick={() => setLineSpacing(Math.max(1.2, lineSpacing - 0.2))}
+            aria-label="Decrease line spacing"
+            disabled={lineSpacing <= 1.2}
+            className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50"
+          >
+            Line-
+          </button>
+          <button 
+            onClick={() => setLineSpacing(lineSpacing + 0.2)}
+            aria-label="Increase line spacing"
+            className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200"
+          >
+            Line+
+          </button>
+          <button 
+            onClick={() => setHighContrast(!highContrast)}
+            aria-label={highContrast ? "Use standard contrast" : "Use high contrast"}
+            className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200"
+          >
+            {highContrast ? "Standard Contrast" : "High Contrast"}
+          </button>
+          <button 
+            onClick={() => setAudioEnabled(!audioEnabled)}
             aria-label={audioEnabled ? "Disable audio" : "Enable audio"}
-            className={styles.audioButton}
+            className="px-2 py-1 bg-white border border-gray-300 rounded hover:bg-gray-200"
           >
             {audioEnabled ? "Audio On" : "Audio Off"}
           </button>
-        </div>
-      </div>
-
-      <div className={styles.activityContent}>
-        {/* Your existing activity content sections */}
-        <div className={styles.activityInfo}>
-          <div className={styles.activityDescription}>
-            <h2>What We'll Do</h2>
-            <p>{activity.description}</p>
-            {audioEnabled && (
-              <button 
-                className={styles.audioButton}
-                aria-label="Listen to description"
-              >
-                🔊 Listen
-              </button>
-            )}
-          </div>
-
-          <div className={styles.learningGoals}>
-            <h2>Learning Goals</h2>
-            <ul>
-              {activity.learningGoals.map((goal, index) => (
-                <li key={index}>{goal}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className={styles.materialsNeeded}>
-            <h2>Materials Needed</h2>
-            <ul className={styles.materialsList}>
-              {activity.materials.map((material, index) => (
-                <li key={index}>
-                  <span className={styles.materialCheck}>✓</span>
-                  {material}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className={styles.activityInstructions}>
-          <h2>Activity Steps</h2>
-          <div className={styles.stepsProgress}>
-            <div 
-              className={styles.progressBar} 
-              style={{ width: `${(completedSteps.length / activity.instructions.length) * 100}%` }}
-            ></div>
-          </div>
-          
-          <div className={styles.stepNavigation}>
-            <button 
-              onClick={handlePrevStep} 
-              disabled={currentStep === 0}
-              className={styles.stepButton}
-            >
-              ← Previous
-            </button>
-            <span className={styles.stepCounter}>
-              Step {currentStep + 1} of {activity.instructions.length}
-            </span>
-            <button 
-              onClick={handleNextStep}
-              disabled={currentStep === activity.instructions.length - 1}
-              className={styles.stepButton}
-            >
-              Next →
-            </button>
-          </div>
-          
-          <div className={styles.currentStep}>
-            <h3>Step {currentStep + 1}:</h3>
-            <p>{activity.instructions[currentStep]}</p>
-            
-            {audioEnabled && (
-              <button className={styles.listenButton}>
-                🔊 Listen to this step
-              </button>
-            )}
-            
-            <button 
-              onClick={() => handleStepComplete(currentStep)}
-              className={`${styles.completeStepButton} ${completedSteps.includes(currentStep) ? styles.completed : ''}`}
-            >
-              {completedSteps.includes(currentStep) ? "✓ Completed" : "Mark as Complete"}
-            </button>
-          </div>
-          
-          {activity.type === 'visual' && (
-            <div className={styles.storyPlayer}>
-              <h3>Story Player</h3>
-              <div className={styles.storyContainer}>
-                {!isStoryPlaying ? (
-                  <div className={styles.storyStartScreen}>
-                    <Image 
-                      src="/images/placeholder/400/300"
-                      alt="Story thumbnail"
-                      width={400}
-                      height={300}
-                    />
-                    <button 
-                      onClick={handlePlayStory}
-                      className={styles.startStoryButton}
-                    >
-                      Start Story
-                    </button>
-                  </div>
-                ) : (
-                  <div className={styles.storyPlayingScreen}>
-                    <div className={styles.storyVisual}>
-                      <Image 
-                        src="/images/placeholder/400/300"
-                        alt="Story scene"
-                        width={400}
-                        height={300}
-                      />
-                    </div>
-                    <div className={styles.storyText}>
-                      <p className={styles.highlightedText}>
-                        <span className={styles.highlighted}>Once upon a time</span>, there was a hero named Bright Star who could shine light in the darkest places.
-                      </p>
-                    </div>
-                    <div className={styles.storyControls}>
-                      <button className={styles.storyControlButton}>⏮️ Rewind</button>
-                      <button 
-                        onClick={handlePauseStory}
-                        className={styles.storyControlButton}
-                      >
-                        ⏸️ Pause
-                      </button>
-                      <button className={styles.storyControlButton}>⏭️ Forward</button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-        
-        <div className={styles.adaptationsSection}>
-          <h2>Dyslexia-Friendly Adaptations</h2>
-          <div className={styles.adaptationsList}>
-            {activity.adaptations.map((adaptation, index) => (
-              <div key={index} className={styles.adaptationItem}>
-                <span className={styles.adaptationIcon}>🔍</span>
-                <span>{adaptation}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className={styles.completionTracker}>
-          <h2>Activity Completion</h2>
-          <div className={styles.completionSteps}>
-            {activity.completionSteps.map((step, index) => (
-              <div 
-                key={index} 
-                className={`${styles.completionStep} ${completedSteps.includes(index) ? styles.completed : ''}`}
-              >
-                <div className={styles.completionCheckbox}>
-                  {completedSteps.includes(index) ? "✓" : (index + 1)}
-                </div>
-                <div className={styles.completionText}>{step}</div>
-              </div>
-            ))}
-          </div>
-          
-          <button 
-            disabled={completedSteps.length < activity.completionSteps.length}
-            className={styles.finishActivityButton}
-          >
-            {completedSteps.length < activity.completionSteps.length 
-              ? `Complete ${activity.completionSteps.length - completedSteps.length} more steps` 
-              : "Finish Activity!"}
-          </button>
-        </div>
-        
-        {/* NEW SECTION: Navigation Links using Next.js Link component */}
-        <div className={styles.navigationLinks}>
-          <h2>Continue Learning</h2>
-          <div className={styles.linksGrid}>
-            <Link href={`/curriculum/${activity.weekId}`}>
-              <a className={styles.navLink}>
-                <span className={styles.linkIcon}>📚</span>
-                <span>Back to Week {activity.weekId}</span>
-              </a>
-            </Link>
-            
-            <Link href="/resources/visual-supports">
-              <a className={styles.navLink}>
-                <span className={styles.linkIcon}>🖼️</span>
-                <span>Visual Support Materials</span>
-              </a>
-            </Link>
-            
-            <Link href={`/projects/${activity.weekId}`}>
-              <a className={styles.navLink}>
-                <span className={styles.linkIcon}>🏠</span>
-                <span>Week {activity.weekId} Take-Home Project</span>
-              </a>
-            </Link>
-            
-            <Link href="/accessibility-settings">
-              <a className={styles.navLink}>
-                <span className={styles.linkIcon}>⚙️</span>
-                <span>Adjust Accessibility Settings</span>
-              </a>
-            </Link>
-          </div>
-          
-          <h3>Related Activities</h3>
-          <div className={styles.relatedActivities}>
-            {relatedActivities.map(relatedActivity => (
-              <Link href={`/activities/${relatedActivity.id}`} key={relatedActivity.id}>
-                <a className={`${styles.relatedActivity} ${styles[relatedActivity.type]}`}>
-                  <span className={styles.activityTypeIcon}>{getActivityTypeIcon(relatedActivity.type)}</span>
-                  <span>{relatedActivity.title}</span>
-                </a>
-              </Link>
-            ))}
-          </div>
-        </div>
-        
-        {/* Page progress bar at bottom */}
-        <div className={styles.pageProgress}>
-          <div className={styles.progressWrapper}>
-            <div className={styles.progressLabel}>Page Progress:</div>
-            <div className={styles.progressBarContainer}>
-              <div 
-                className={styles.progressBarFill} 
-                style={{ width: '65%' }}
-              ></div>
-            </div>
-          </div>
-          <Link href="/curriculum">
-            <a className={styles.backToCurriculumButton}>
-              Back to Main Curriculum
-            </a>
-          </Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default ActivityComponent;
+export default ActivityPage;
